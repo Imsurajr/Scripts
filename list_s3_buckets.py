@@ -8,3 +8,4 @@ print("List of S3 Buckets:")
 for bucket in response['Buckets']:
     print(bucket['Name'])
 
+# Testing GitHub Actions trigger
