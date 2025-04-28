@@ -1,4 +1,6 @@
 import csv
+import boto3
+
 
 def read_and_analyze_csv(file_path, grade_threshold):
     students_above_threshold = []
@@ -10,15 +12,28 @@ def read_and_analyze_csv(file_path, grade_threshold):
             grade = float(grade)
             if grade > grade_threshold:
                 students_above_threshold.append(name)
-
     return students_above_threshold
 
-grade_threshold = 80
 
-csv_file_path = '/home/ec2-user/students.csv'
+def list_s3_buckets():
+    s3 = boto3.client('s3')
+    response = s3.list_buckets()
+    print("List of S3 Buckets:")
+    for bucket in response['Buckets']:
+        print(bucket['Name'])
 
-students = read_and_analyze_csv(csv_file_path, grade_threshold)
-print(f"Students with average grade above {grade_threshold}:")
-for student in students:
-    print(student)
 
+def main():
+    grade_threshold = 80
+    csv_file_path = '/home/ec2-user/students.csv'
+
+    students = read_and_analyze_csv(csv_file_path, grade_threshold)
+    print(f"Students with average grade above {grade_threshold}:")
+    for student in students:
+        print(student)
+
+    list_s3_buckets()
+
+
+if __name__ == "__main__":
+    main()
